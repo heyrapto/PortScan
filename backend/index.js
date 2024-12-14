@@ -5,7 +5,7 @@ const scraperRoutes = require("./routes/scraperRoutes");
 const validateURl = require("./middleware/validateUrl");
 
 const errorHandler = require("./middleware/errorHandler");
-const PORT = 3500;
+const PORT = 7000;
 
 app.use(cors())
 app.use(express.json())

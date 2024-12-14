@@ -1,7 +1,9 @@
 const express = require("express");
 
-const scrapePortfolio = (req, res) => {
-    const { url } = req.body;
+// cheerio - parser for html // jsdom - html and some js parser //
+
+const scrapePortfolio = async(req, res) => {
+    const { url } = await req.body;
     try{
     }
     catch(error){
