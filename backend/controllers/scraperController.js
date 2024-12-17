@@ -19,49 +19,94 @@ const { performanceMetrics } = require("../utils/siteSpeed");
    // 9. Tell Users the best practices, suggestions and critics
 
 const scrapePortfolio = async (req, res) => {
-    const browser = await browser.launch();
     const { url } = req.body;
-    try{
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        await page.goto(url)
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext();
+    const page = await context.newPage();
 
-    // Extract meta tags
-    const metaTags = await page.$$eval('meta', metas => metas.map(meta => meta.getAttribute('name') && meta.getAttribute('name').toLowerCase() === 'description'? meta.getAttribute('content') : null));
-    console.log("Meta tags:", metaTags);
+    try {
+        await page.goto(url, { waitUntil: "networkidle" });
 
-    // Extract link a tags
-    const aTags = await page.locator('a').evaluateAll(anchors => anchors.map(a => a.href));
-    const aCount = await page.locator('a').count();
-    console.log("Links:", aTags);
+        // Extract Title
+        const title = await page.title();
+        
+        // Extract Meta Tags (description and keywords)
+        const metaTags = await page.$$eval('meta', (metas) => {
+            const metaObj = {};
+            metas.forEach(meta => {
+                const name = meta.getAttribute('name') || meta.getAttribute('property');
+                if (name) {
+                    metaObj[name.toLowerCase()] = meta.getAttribute('content');
+                }
+            });
+            return metaObj;
+        });
 
-    // Extract div tags
-    const divTags = page.locator('div').count();
-    const sectionTags = page.locator('section').count();
+        // Extract <a> tags
+        const links = await page.$$eval('a', anchors => anchors.map(a => a.href).filter(href => href));
+        const linkCount = links.length;
 
-    // Extract alt attributes
-    const h1Tags = page.locator('h1').getByAltText();
-    const h2Tags = page.locator('h2').getByAltText();
-    const h3Tags = page.locator('h3').getByAltText();
-    const pTags = page.locator('p').getByAltText();
-    const imgTags = page.locator('img').getByAltText();
+        // Extract <div> and <section> counts
+        const divCount = await page.locator('div').count();
+        const sectionCount = await page.locator('section').count();
 
-    // titleTags
-    const titleTags = page.locator('title').evaluateAll(anchors => anchors.map(title => title));
-    const imageData = await imageOptimizationMetrics(url);
-    const performanceData = await performanceMetrics(url);
-    res.status(204).json({
-        message: "Successfully Scraped",
-        image: imageData,
-        performance: performanceData,
-    });
-    // Create pages, interact with UI elements, assert values
+        // Extract <h1>, <p> tags
+        const h1Tags = await page.$$eval('h1', h1s => h1s.map(h1 => h1.textContent.trim()));
+        const pTags = await page.$$eval('p', ps => ps.map(p => p.textContent.trim()));
+
+        // Extract Images and Alt attributes
+        const imgAlts = await page.$$eval('img', imgs => imgs.map(img => ({
+            src: img.src,
+            alt: img.alt || "No alt attribute"
+        })));
+
+        // Check URL format
+        const isValidURL = /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url);
+
+        // Site Speed and Image Optimization
+        const imageData = await imageOptimizationMetrics(url);
+        const performanceData = await performanceMetrics(url);
+
+        // Construct Response
+        res.status(200).json({
+            message: "Successfully Scraped",
+            seo: {
+                title: title || "No title tag",
+                meta: metaTags,
+                isTitleUniqueAndDescriptive: title.length > 10, // Example check
+                isMetaDescriptionValid: metaTags['description'] && metaTags['description'].length >= 160,
+                isURLValid: isValidURL
+            },
+            content: {
+                h1Tags,
+                pTagsCount: pTags.length,
+                divCount,
+                sectionCount
+            },
+            links: {
+                totalLinks: linkCount,
+                links
+            },
+            images: {
+                totalImages: imgAlts.length,
+                altAttributes: imgAlts
+            },
+            performance: performanceData,
+            imageOptimization: imageData,
+            suggestions: [
+                linkCount >= 10 ? "Sufficient project links are present" : "Add more project links (>= 10)",
+                divCount <= 5 ? "Web page has minimal content" : "Consider reducing <div> tags for simplicity",
+                h1Tags.length > 0 ? "H1 tags found" : "Add descriptive H1 tags for better SEO",
+                isValidURL ? "URL format is valid" : "Ensure URL follows correct format e.g., https://example.com"
+            ]
+        });
+
     } catch (error) {
         console.error("Error scraping portfolio:", error);
-        res.status(500).send("Error scraping portfolio");
+        res.status(500).json({ error: "Error scraping portfolio", details: error.message });
     } finally {
         await browser.close();
     }
-}
+};
 
-module.exports = {scrapePortfolio};
+module.exports = { scrapePortfolio };
