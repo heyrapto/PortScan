@@ -19,11 +19,12 @@ const { performanceMetrics } = require("../utils/siteSpeed");
    // 9. Tell Users the best practices, suggestions and critics
 
 const scrapePortfolio = async (req, res) => {
-    try{
-    const browser = await chromium.launch({ headless: false });
-    const page = await browser.newPage();
+    const browser = await browser.launch();
     const { url } = req.body;
-    await page.goto(url)
+    try{
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(url)
 
     // Extract meta tags
     const metaTags = await page.$$eval('meta', metas => metas.map(meta => meta.getAttribute('name') && meta.getAttribute('name').toLowerCase() === 'description'? meta.getAttribute('content') : null));
@@ -55,10 +56,11 @@ const scrapePortfolio = async (req, res) => {
         performance: performanceData,
     });
     // Create pages, interact with UI elements, assert values
-    await browser.close();
     } catch (error) {
         console.error("Error scraping portfolio:", error);
         res.status(500).send("Error scraping portfolio");
+    } finally {
+        await browser.close();
     }
 }
 
