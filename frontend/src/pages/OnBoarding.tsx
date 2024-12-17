@@ -33,7 +33,7 @@ const OnBoarding = () => {
       <section className="flex flex-col items-center justify-center mt-[150px] relative">
         <form onSubmit={handleSubmit}>
           <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={"eg. raptomi.com"} type={"text"} />
-        <Button tag={"submit"} type={submit} />
+        <Button tag={"submit"} type={"submit"} />
         </form>
 
         <Section>
