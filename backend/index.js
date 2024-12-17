@@ -9,7 +9,7 @@ const PORT = 7000;
 
 app.use(cors())
 app.use(express.json())
-app.use("/", validateURl, scraperRoutes)
+app.use("/api/scrape", scraperRoutes)
 
 app.listen(PORT, () => {
     console.log("Server is running on ", PORT);
