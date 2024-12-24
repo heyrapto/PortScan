@@ -1,9 +1,11 @@
+import { ReactNode } from "react"
+
 interface SectionProps {
-    children: JSX.Element
+    children: ReactNode
 }
 
 export const Section = ({ children }: SectionProps) => {
     return(
-        <section className="flex flex-col gap-4">{children}</section>
+        <section className="flex flex-col gap-6 text-center items-center justify-center">{children}</section>
     )
 }

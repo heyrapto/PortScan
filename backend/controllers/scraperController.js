@@ -20,6 +20,7 @@ const { performanceMetrics } = require("../utils/siteSpeed");
 
 const scrapePortfolio = async (req, res) => {
     const { url } = req.body;
+    if(!url) return res.status(500).json({ message: "Input a URL "})
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
