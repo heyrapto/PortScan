@@ -4,7 +4,7 @@ import OnBoarding from "./pages/OnBoarding";
 const App = () => {
   return(
     <div>
-      <OnBoarding />
+      <OnBoarding 
       
     </div>
   )
