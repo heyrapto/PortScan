@@ -1,5 +1,6 @@
 import { ChangeEventHandler } from "react"
-import { Link } from "lucide-react"; 
+import { Link } from "lucide-react";
+import { Button } from "./Button";
 interface InputProps {
     label?: string
     value?: string
@@ -9,11 +10,12 @@ interface InputProps {
 }
 export const Input = ({ onChange, value, placeholder, type }:InputProps ) => {
     return(
-        <div className="flex w-[300px] py-[5px] rounded-md">
-        <div className="flex gap-2">
-        <Link />
-        <input className="border-none outline-none w-full" type={type} placeholder={placeholder} value={value} onChange={onChange} />
+        <div className="flex w-[300px] rounded-md w-[300px] border border-gray-600 p-[5px] justify-between items-center">
+        <div className="flex gap-1 ml-[10px]">
+        <Link className="w-[15px]" />
+        <input className="border-none outline-none w-full bg-transparent text-[0.7rem]" type={type} placeholder={placeholder} value={value} onChange={onChange} />
         </div>
+        <Button tag={"Analyze"} className={""} />
         </div>
     )
 }

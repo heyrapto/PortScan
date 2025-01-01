@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer";
 import { Section } from "../components/Section";
 import { useNavigate } from "react-router-dom";
 import { HowItWorks } from "../components/HowItWorks";
+import HirePercentage from "../components/HirePercentage";
 
 const OnBoarding = () => {
   const [ url, setUrl ] = useState<string>("");
@@ -33,11 +34,13 @@ const OnBoarding = () => {
     console.log(url)
   }
     return (
-      <section className="flex flex-col">
-        <span>Analyze your portfolio</span>
-        <h1>Make it <span>Hireable</span></h1>
-        <p>Let's analyze your portfolio in one click</p>
+      <section className="flex flex-col text-white items-center justify-center mt-[100px]">
+        <span className="text-gray-400 text-[0.9rem] pb-[15px]">Analyze your portfolio</span>
+        <h1 className="font-bold text-[3.5rem]">Make it <span>Hireable</span></h1>
+        <p className="pb-[50px] text-gray-400 text-[0.9rem]">Let's analyze and improve your portfolio in one click</p>
         <Input placeholder={"Paste your link here"} type={"text"} />
+
+        <HirePercentage />
       </section>
     )
   }
