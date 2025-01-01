@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { HowItWorks } from "../components/HowItWorks";
 import HirePercentage from "../components/HirePercentage";
 import People from "../components/People";
+import FacingDown from "../components/Design/FacingDown";
+import FacingUp from "../components/Design/FacingUp";
 
 const OnBoarding = () => {
   const [ url, setUrl ] = useState<string>("");
@@ -41,7 +43,9 @@ const OnBoarding = () => {
         <p className="pb-[50px] text-gray-400 text-[0.9rem]">Let's analyze and improve your portfolio in one click</p>
         <Input placeholder={"Paste your link here"} type={"text"} />
         <People />
+        <FacingUp />
         <HirePercentage />
+        <FacingDown />
         <Footer />
       </section>
     )
