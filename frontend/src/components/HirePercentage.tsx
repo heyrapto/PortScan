@@ -1,6 +1,6 @@
 const HirePercentage = () => {
   return (
-    <section className="flex flex-col gap-5 mt-[50px] items-center justify-center">
+    <section className="flex flex-col gap-5 mt-[50px] items-center justify-center relative">
         <div className="border border-gray-600 px-[10px] w-fit rounded-full py-[5px]">
             <p className="text-gray-500 text-[0.6rem]">100% hireable</p>
         </div>
