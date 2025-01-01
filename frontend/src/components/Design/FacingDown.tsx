@@ -1,7 +1,15 @@
-const FacingDown = () => {
+import { long, longer, longest, medium, small } from "../../images"
+
+const FacingUp = () => {
   return (
-    <div>FacingDown</div>
+    <div className="absolute top-0 left-0 right-0 m-auto flex flex-col">
+        <img src={small} />
+        <img src={medium} />
+        <img src={long} />
+        <img src={longer} />
+        <img src={longest} />
+    </div>
   )
 }
 
-export default FacingDown
+export default FacingUp;
