@@ -1,5 +1,3 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps } from "react"
-
 interface ButtonProps {
     tag: string
     className: string
