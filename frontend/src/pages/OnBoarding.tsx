@@ -37,15 +37,13 @@ const OnBoarding = () => {
     console.log(url)
   }
     return (
-      <section className="flex flex-col text-white items-center justify-center h-screen">
+      <section className="flex flex-col text-white items-center justify-center h-screen z-50">
         <span className="text-gray-400 text-[0.9rem] pb-[15px] pt-[60px]">Analyze your portfolio</span>
-        <h1 className="font-bold text-[3.5rem]">Make it <span>Hireable</span></h1>
+        <h1 className="font-bold text-[3.5rem]">Make it <span className="bg-[#2FB6FF] w-[10px]">Hireable</span></h1>
         <p className="pb-[50px] text-gray-400 text-[0.9rem]">Let's analyze and improve your portfolio in one click</p>
         <Input placeholder={"Paste your link here"} type={"text"} />
         <People />
-        <FacingUp />
         <HirePercentage />
-        <FacingDown />
         <Footer />
       </section>
     )
