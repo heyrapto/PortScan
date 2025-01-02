@@ -1,7 +1,6 @@
 import { ChangeEventHandler } from "react"
 import { Link } from "lucide-react";
 import { Button } from "./Button";
-import People from "./People";
 interface InputProps {
     label?: string
     value?: string
@@ -19,7 +18,6 @@ export const Input = ({ onChange, value, placeholder, type }:InputProps ) => {
         </div>
         </div>
         <Button tag={"Analyze"} className={"md:absolute md:mt-0 mt-[20px] rounded-md md:rounded-[12px] h-[35px] w-full md:w-[80px] md:top-[5px] right-[5px]"} />
-        <People />
         </section>
     )
 }
