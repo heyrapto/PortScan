@@ -13,6 +13,7 @@ const OnBoarding = () => {
         </div>
         <p className="pb-[50px] text-gray-400 text-[0.9rem] md:w-full w-[300px] text-center">Let's analyze and improve your portfolio in one click</p>
         <Input placeholder={"Paste your link here"} type={"text"} />
+        <People />
         <HirePercentage />
         <Footer />
       </section>
