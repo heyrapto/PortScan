@@ -10,7 +10,7 @@ interface InputProps {
 }
 export const Input = ({ onChange, value, placeholder, type }:InputProps ) => {
     return(
-        <div className="flex w-[300px] rounded-[12px] w-[300px] border border-[#262626] p-[5px] justify-between items-center">
+        <div className="flex rounded-[12px] w-[300px] border border-[#262626] p-[5px] justify-between items-center">
         <div className="flex gap-1 ml-[10px]">
         <Link className="w-[15px]" />
         <input className="border-none outline-none w-full bg-transparent text-[0.7rem]" type={type} placeholder={placeholder} value={value} onChange={onChange} />
