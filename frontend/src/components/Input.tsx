@@ -31,7 +31,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
         setError(null); // Reset error state
 
         try {
-            const response = await axios.post("localhost:7000", { url });
+            const response = await axios.post("http://localhost:7000/api/scrape", { url });
             const data = JSON.stringify(response);
             setResponse(data); 
             console.log(data)
@@ -65,7 +65,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
                 disabled={loading} 
             />
 
-            {error && <div className="text-red-500 mt-2">{error}</div>} 
+            {error && <div className="text-red-500 mt-2 text-[0.6rem]">{error}</div>} 
             {response && !loading && (
                 <div className="mt-4 text-green-500">
                     <pre>{JSON.stringify(response, null, 2)}</pre>
