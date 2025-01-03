@@ -19,8 +19,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.target.value);
   };
-
-  // Handle form submission (send POST request)
+  
   const handleSubmit = async () => {
     if (!url) {
       setError("Please enter a valid URL");
@@ -42,14 +41,12 @@ export const Input = ({ placeholder, type }: InputProps) => {
         }
       );
 
-      // Assuming response.data contains the data you want to show
       const data = result.data; 
-      setResponse(JSON.stringify(data, null, 2)); // Beautify JSON if needed
+      setResponse(JSON.stringify(data, null, 2));
       console.log(data);
       
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
-        // Check if the error is from Axios, and extract the error message from the response if available
         setError(err.response.data.message || "There was an error with the request. Please try again.");
       } else {
         setError("There was an error with the request. Please try again.");
