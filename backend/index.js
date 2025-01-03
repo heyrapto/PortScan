@@ -5,13 +5,13 @@ const cors = require('cors');
 const PORT = process.env.PORT || 7000;
 
 app.use(cors({
-  origin: ["https://portscan-clhm.onrender.com", "http://localhost:7000"],
+  origin: ["https://port-scan-ten.vercel.app", "http://localhost:7000"],
   methods: ["POST", "GET"],
 }));
 
 const allowedOrigins = [
-  "https://portscan-clhm.onrender.com", 
-  "http://localhost:7000",
+  "https://port-scan-ten.vercel.app", 
+  "http://localhost:5173",
 ]
 app.use(
   cors({
