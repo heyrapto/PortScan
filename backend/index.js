@@ -7,7 +7,9 @@ const validateURl = require("./middleware/validateUrl");
 const errorHandler = require("./middleware/errorHandler");
 const PORT = 7000 | "https://port-scan-backend.vercel.app";
 
-app.use(cors())
+app.use(cors({
+    origin: 'https://port-scan-ten.vercel.app',
+}))
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
 
