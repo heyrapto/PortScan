@@ -1,8 +1,6 @@
 import { ChangeEventHandler, useState } from "react";
 import { Link } from "lucide-react";
 import { Button } from "./Button";
-import axios from "axios";
-
 interface InputProps {
   placeholder: string;
   type: string;
@@ -13,9 +11,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
   const [url, setUrl] = useState<string>(""); 
   const [loading, setLoading] = useState<boolean>(false); 
   const [error, setError] = useState<string | null>(null);
-  const [response, setResponse] = useState<string | null>(null);
 
-  // Handle URL input change
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.target.value);
   };
@@ -27,33 +23,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
     }
 
     setLoading(true);
-    setError(null); // Reset error state
-
-    try {
-      // Add headers to the axios request
-      const result = await axios.post(
-        "https://port-scan-backend.vercel.app/api/scrape", 
-        { url },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      );
-
-      const data = result.data; 
-      setResponse(JSON.stringify(data, null, 2));
-      console.log(data);
-      
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "There was an error with the request. Please try again.");
-      } else {
-        setError("There was an error with the request. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
+    setError(null); 
   };
 
   return (
@@ -79,12 +49,6 @@ export const Input = ({ placeholder, type }: InputProps) => {
       />
 
       {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>} 
-      {response && !loading && (
-        <div className="mt-4 text-green-500">
-          <pre className="underline text-center">View Results</pre>
-          <pre className="mt-2 text-xs">{response}</pre>
-        </div>
-      )}
     </section>
   );
 };
