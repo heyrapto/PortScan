@@ -33,12 +33,11 @@ export const Input = ({ placeholder, type }: InputProps) => {
     try {
       // Add headers to the axios request
       const result = await axios.post(
-        "https://port-scan-backend.vercel.app", 
+        "https://port-scan-backend.vercel.app/api/scrape", 
         { url },
         {
           headers: {
-            "Content-Type": "application/json", // Specify the content type (JSON)
-            "X-Requested-With": "XMLHttpRequest", // Optional custom header
+            "Content-Type": "application/json",
           }
         }
       );
