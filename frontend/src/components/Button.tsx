@@ -1,8 +1,8 @@
 interface ButtonProps {
     tag: string
     className: string
-    onClick: React.MouseEventHandler<HTMLButtonElement>
-    disabled: boolean
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
+    disabled?: boolean
 }
 
 export const Button = ({ tag, className, onClick, disabled }: ButtonProps) => {
