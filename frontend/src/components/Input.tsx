@@ -32,7 +32,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
     try {
       // Add headers to the axios request
       const result = await axios.post(
-        "https://portscan-clhm/api/scrape.onrender.com",
+        "https://portscan-clhm.onrender.com/api/scrape",
         { url },
         {
           headers: {
