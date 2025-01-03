@@ -31,7 +31,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
         setError(null); // Reset error state
 
         try {
-            const response = await axios.post("http://localhost:7000/api/scrape", { url });
+            const response = await axios.post("https://port-scan-backend.vercel.app", { url });
             const data = JSON.stringify(response);
             setResponse(data); 
             console.log(data)
