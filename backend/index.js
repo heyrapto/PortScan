@@ -9,7 +9,8 @@ const PORT = 7000 | "https://port-scan-backend.vercel.app";
 
 app.use(cors({
     origin: 'https://port-scan-ten.vercel.app',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type'],
+    credentials: false,
 }))
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
