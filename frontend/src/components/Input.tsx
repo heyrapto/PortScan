@@ -65,10 +65,10 @@ export const Input = ({ placeholder, type }: InputProps) => {
                 disabled={loading} 
             />
 
-            {error && <div className="text-red-500 mt-2 text-[0.6rem]">{error}</div>} 
+            {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>} 
             {response && !loading && (
                 <div className="mt-4 text-green-500">
-                    <pre>{JSON.stringify(response, null, 2)}</pre>
+                    <pre className="underline text-center">View Results</pre>
                 </div>
             )}
         </section>
