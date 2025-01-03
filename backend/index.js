@@ -4,17 +4,13 @@ const scraperRoutes = require("./routes/scraperRoutes");
 const cors = require('cors');
 const PORT = process.env.PORT || 7000;
 
-app.use(cors({
-  origin: ["https://port-scan-ten.vercel.app", "http://localhost:7000"],
-  methods: ["POST", "GET"],
-}));
-
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app", 
   "http://localhost:5173",
 ]
 app.use(
   cors({
+    exposedHeaders: ["Content-Type"],
     origin: (origin, callback) => {
       if(!origin || allowedOrigins.includes(origin))  {
         callback(null, true);
@@ -22,9 +18,12 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["POST", "GET"]
+    methods: ["POST", "GET"],
+    allowedHeaders: ["Content-Type"],
   })
 )
+
+app.options("*", cors())
 
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
