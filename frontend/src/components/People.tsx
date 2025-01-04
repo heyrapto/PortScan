@@ -1,8 +1,10 @@
 import { person1, person2, person3, person4, person5, person6, person7 } from "../images";
+import FacingUp from "./Design/FacingDown";
 
 const People = () => {
   return (
     <div className="flex mt-[70px] py-[25px] relative w-full">
+      <FacingUp />
       <div className="flex items-center justify-center bottom-0 left-0 gap-[100px] absolute overflow-hidden right-0 m-auto">
       <img src={person1} className="w-[50px] " />
       <img src={person2} className="w-[50px] " />
