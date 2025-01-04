@@ -89,6 +89,9 @@ export const Input = ({ placeholder, type }: InputProps) => {
         <div className="mt-4 text-green-500">
         </div>
       )}
+      {loading && (
+        <div className="absolute top-0 left-0 right-0 m-auto bottom-0 backdrop-blur-2xl bg-transparent flex flex-col"></div>
+      )}
     </section>
   );
 };
