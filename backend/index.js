@@ -24,7 +24,6 @@ app.use(
 )
 
 app.options("*", cors())
-
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
 app.get("/", (req, res) => {
@@ -32,5 +31,5 @@ app.get("/", (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log("Server is running on ", PORT);
+    console.log("Server is running on", PORT);
 });

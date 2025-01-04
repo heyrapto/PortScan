@@ -17,7 +17,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
   const [response, setResponse] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Handle URL input change
+  
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrl(e.target.value);
   };
@@ -70,7 +70,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
             className="border-none outline-none w-full bg-transparent md:text-[0.7rem] items-center text-[0.8rem]"
             type={type}
             placeholder={placeholder}
-            value={url}
+            value={url.toLowerCase()}
             onChange={handleUrlChange}
             required
           />
