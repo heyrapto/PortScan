@@ -68,39 +68,34 @@ const scrapePortfolio = async (req, res) => {
         const imageData = await imageOptimizationMetrics(url);
         const performanceData = await performanceMetrics(url);
 
-        // Construct Response
-        res.status(200).json({
-            message: "Successfully Scraped",
+        // Results 
+        const results = {
             seo: {
-                title: title || "No title tag",
-                meta: metaTags,
                 isTitleUniqueAndDescriptive: title.length > 10, // Example check
                 isMetaDescriptionValid: metaTags['description'] && metaTags['description'].length >= 160,
-                isURLValid: isValidURL
             },
-            content: {
-                h1Tags,
-                pTagsCount: pTags.length,
-                divCount,
-                sectionCount
-            },
-            links: {
-                totalLinks: linkCount,
-                links
-            },
-            images: {
-                totalImages: imgAlts.length,
-                altAttributes: imgAlts
-            },
-            performance: performanceData,
-            imageOptimization: imageData,
+            note: [
+                "Overall you have a solid portfolio but you lack in some aspect for example..."
+            ],
             suggestions: [
                 linkCount >= 10 ? "Sufficient project links are present" : "Add more project links (>= 10)",
                 divCount <= 5 ? "Web page has minimal content" : "Consider reducing <div> tags for simplicity",
                 h1Tags.length > 0 ? "H1 tags found" : "Add descriptive H1 tags for better SEO",
-                isValidURL ? "URL format is valid" : "Ensure URL follows correct format e.g., https://example.com"
-            ]
-        });
+                performanceData.pageLoadTime < 3000,
+                performanceData.domContentLoaded < 3000,
+                imageData > 300,
+                imgAlts.length > 10,
+                imgAlts > 15,
+                pTags.length > 10,
+                sectionCount.length > 5,
+                title ? "There is title tags" : "Add Title Tags",
+                metaTags > 10,
+            ],
+            critiques: [],
+        };
+
+        // Construct Response
+        res.status(200).json(results.note, results.suggestions, results.critiques, results.performance);
 
     } catch (error) {
         console.error("Error scraping portfolio:", error);

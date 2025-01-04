@@ -1,1 +1,1 @@
-export const results = []; // i wanna have the  suggestions, best best practices and critiques stored here
+export const results = []; // i wanna have the suggestions, best best practices and critiques stored here
