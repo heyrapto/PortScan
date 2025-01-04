@@ -95,7 +95,7 @@ const scrapePortfolio = async (req, res) => {
         };
 
         // Construct Response
-        res.status(200).json(results.note, results.suggestions, results.critiques, results.performance);
+        res.status(200).json(results.note, results.suggestions, results.critiques);
 
     } catch (error) {
         console.error("Error scraping portfolio:", error);
