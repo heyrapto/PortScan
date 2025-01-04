@@ -2,6 +2,7 @@ import { ChangeEventHandler, useState } from "react";
 import { Link } from "lucide-react";
 import { Button } from "./Button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface InputProps {
   placeholder: string;
@@ -14,6 +15,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
   const [loading, setLoading] = useState<boolean>(false); 
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Handle URL input change
   const handleUrlChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -27,10 +29,9 @@ export const Input = ({ placeholder, type }: InputProps) => {
     }
 
     setLoading(true);
-    setError(null); // Reset error state
-
+    setError(null); 
+    
     try {
-      // Add headers to the axios request
       const result = await axios.post(
         "http://localhost:7000/api/scrape",
         { url },
@@ -41,9 +42,13 @@ export const Input = ({ placeholder, type }: InputProps) => {
         }
       );
 
-      const data = result.data; 
-      setResponse(JSON.stringify(data, null, 2));
-      console.log(data);
+      const results = result.data; 
+
+      if(results){
+        navigate("/results");
+      }
+      setResponse(JSON.stringify(results, null, 2));
+      console.log(results);
       
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
@@ -67,6 +72,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
             placeholder={placeholder}
             value={url}
             onChange={handleUrlChange}
+            required
           />
         </div>
       </div>
@@ -81,8 +87,6 @@ export const Input = ({ placeholder, type }: InputProps) => {
       {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>} 
       {response && !loading && (
         <div className="mt-4 text-green-500">
-          <pre className="underline text-center">View Results</pre>
-          <pre className="mt-2 text-xs"></pre>
         </div>
       )}
     </section>
