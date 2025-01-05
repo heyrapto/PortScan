@@ -90,12 +90,13 @@ const scrapePortfolio = async (req, res) => {
                 sectionCount.length > 5,
                 title ? "There is title tags" : "Add Title Tags",
                 metaTags > 10,
+                
             ],
             critiques: [],
         };
 
         // Construct Response
-        res.status(200).json(results.note, results.suggestions, results.critiques);
+        res.status(200).json(results);
 
     } catch (error) {
         console.error("Error scraping portfolio:", error);
