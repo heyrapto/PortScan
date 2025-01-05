@@ -57,3 +57,7 @@
         right: 0;
     }
 }
+
+.circle{
+    clip-path: circle();
+}
