@@ -1,4 +1,4 @@
-const logger = () => {
+const logger = (req, res) => {
 
 }
 
