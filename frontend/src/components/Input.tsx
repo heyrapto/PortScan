@@ -10,11 +10,16 @@ interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
+interface ResultProps {
+  suggestions: string[]
+}
+
 export const Input = ({ placeholder, type }: InputProps) => {
   const [url, setUrl] = useState<string>(""); 
   const [loading, setLoading] = useState<boolean>(false); 
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<string | null>(null);
+  const [result, setResult] = useState<string[]>([])
   const navigate = useNavigate();
 
   
@@ -32,6 +37,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
     setError(null); 
     
     try {
+      const fetchedData: ResultProps = [];
       const result = await axios.post(
         "http://localhost:7000/api/scrape",
         { url },
@@ -42,6 +48,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
         }
       );
       const results = result.data; 
+      setResult(fetchedData)
 
       if(results){
         navigate("/results");
@@ -86,6 +93,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
       {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>} 
       {response && !loading && (
         <div className="mt-4 text-green-500">
+          {result}
         </div>
       )}
       {loading && (
