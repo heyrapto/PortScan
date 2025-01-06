@@ -10,10 +10,6 @@ interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-interface ResultProps {
-  suggestions: []
-}
-
 export const Input = ({ placeholder, type }: InputProps) => {
   const [url, setUrl] = useState<string>(""); 
   const [loading, setLoading] = useState<boolean>(false); 
@@ -37,7 +33,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
     setError(null); 
     
     try {
-      const fetchedData: ResultProps = [];
+      const fetchedData: string[] = [];
       const result = await axios.post(
         "http://localhost:7000/api/scrape",
         { url },
@@ -47,14 +43,14 @@ export const Input = ({ placeholder, type }: InputProps) => {
           }
         }
       );
-      const results = result.data; 
-      setResult(fetchedData)
+      // const results = result.data; 
+      setResult(fetchedData);
 
-      if(results){
+      if(result){
         navigate("/results");
       }
-      setResponse(JSON.stringify(results, null, 2));
-      console.log(results);
+      setResponse(JSON.stringify(result, null, 2));
+      console.log(fetchedData);
       
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
