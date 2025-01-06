@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 7000;
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app", 
   "http://localhost:5173",
+  "http://localhost:5174",
 ]
 app.use(
   cors({

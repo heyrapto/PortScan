@@ -82,7 +82,7 @@ const scrapePortfolio = async (req, res) => {
 
     // Generate feedback using the generative model
     const result = await model.generateContent(prompt);
-    res.status(200).json(result.response.text());
+    console.log(result.response.text());
 
     // Extract and clean feedback
     const feedbackText = result.response.text();
