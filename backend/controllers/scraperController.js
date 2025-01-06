@@ -4,7 +4,7 @@ const { performanceMetrics } = require("../utils/siteSpeed");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Initialize GoogleGenerativeAI with API Key
-const genAI = new GoogleGenerativeAI("AIzaSyC6psnET5Eib_ALt89hSU_yoJ85oUSaaG8");  // Use your API Key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_URL);  // Use your API Key
 
 // Get the model
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
