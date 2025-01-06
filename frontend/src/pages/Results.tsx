@@ -33,7 +33,7 @@ const Results = () => {
                 <div className="flex items-center justify-center h-[170px] w-[300px] rounded-full bg-gradient-to-r from-pink-400 via-blue-600 to-pink-400 p-2 circle">
                 <div className="flex flex-col w-full h-[135px] items-center justify-center bg-[#040018] rounded-full circle">
                     <p className="text-gray-500 text-[0.7rem] font-semibold">You got</p>
-                 <span className="text-white bg-transparent text-[1.5rem]">{main.percentage}</span>
+                 <span className="text-white bg-transparent text-[1.5rem]">{main.percentage}%</span>
                 </div>
             </div>
             
