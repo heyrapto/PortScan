@@ -11,7 +11,7 @@ interface InputProps {
 }
 
 interface ResultProps {
-  suggestions: string[]
+  suggestions: []
 }
 
 export const Input = ({ placeholder, type }: InputProps) => {
