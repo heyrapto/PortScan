@@ -41,7 +41,6 @@ export const Input = ({ placeholder, type }: InputProps) => {
           }
         }
       );
-
       const results = result.data; 
 
       if(results){
