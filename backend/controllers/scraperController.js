@@ -3,10 +3,7 @@ const { imageOptimizationMetrics } = require("../utils/imageOptimization");
 const { performanceMetrics } = require("../utils/siteSpeed");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Initialize GoogleGenerativeAI with API Key
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_URL);  // Use your API Key
-
-// Get the model
+const genAI = new GoogleGenerativeAI("AIzaSyC6psnET5Eib_ALt89hSU_yoJ85oUSaaG8");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const scrapePortfolio = async (req, res) => {
@@ -76,24 +73,25 @@ const scrapePortfolio = async (req, res) => {
       - URL Format Valid: ${metrics.isValidURL}
       
       Provide feedback in three distinct categories:
-      1. Suggestions for Improvement: List specific actionable suggestions to improve the portfolio.
-      2. Critiques: Provide a critical analysis based on the metrics and performance.
-      3. Best Practices for Portfolio Development: Share industry best practices to follow.
-      
-      Keep the feedback clear, concise, and without any introductory lines.
+      1. Suggestions for Improvement: Provide actionable suggestions.
+      2. Critiques: Provide critical analysis based on the metrics and performance.
+      3. Best Practices for Portfolio Development: Share industry best practices.
+
+      Format the response cleanly, without any introductory lines or placeholders. Only include actionable content under each category.
     `;
 
     // Generate feedback using the generative model
     const result = await model.generateContent(prompt);
+    res.status(200).json(result.response.text());
 
     // Extract and clean feedback
     const feedbackText = result.response.text();
     const feedbackArray = feedbackText.split("\n");
 
-    // Remove any unwanted introductory lines
-    const cleanedSuggestions = feedbackArray.filter(item => item.toLowerCase().includes("suggestion") && !item.toLowerCase().includes("improvement"));
-    const cleanedCritiques = feedbackArray.filter(item => item.toLowerCase().includes("critique"));
-    const cleanedBestPractices = feedbackArray.filter(item => item.toLowerCase().includes("best practice"));
+    // Clean the feedback array
+    const cleanedSuggestions = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("suggestion"));
+    const cleanedCritiques = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("critique"));
+    const cleanedBestPractices = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("best practice"));
 
     // Calculate Hireable Percentage based on metrics
     const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
