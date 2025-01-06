@@ -1,109 +1,122 @@
 const { chromium } = require("playwright");
 const { imageOptimizationMetrics } = require("../utils/imageOptimization");
 const { performanceMetrics } = require("../utils/siteSpeed");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// i need to extract the meta tags to track SEO
-// track alt attributes
-// i need to extract the link <a> to track if there's enough project links ( >= 10 )
-// i need to extract the <div> tag to track if there's enough contents on the web page ( <= 5 per page )
-// i need to extract the h1 and p tags to check if there's enough text content in the web page to better describe the owner of the portfolio for potential clients
-// SEO
-   // 1. check title tags
-   // 2. meta description 
-   // 3. meta keywords
-   // 4. title tag should be unique and descriptive
-   // 5. meta description should be at least 160 characters and should be concise and relevant to the page content
-   // 6. Check URL structure e.g (https://hi.com) is correct format
-   // 7. check site speed ( how fast the page loads)
-   // 8. track image optimization ( monitor individual loading time );
-   // 9. Tell Users the best practices, suggestions and critics
+// Initialize GoogleGenerativeAI with API Key
+const genAI = new GoogleGenerativeAI("AIzaSyC6psnET5Eib_ALt89hSU_yoJ85oUSaaG8");  // Use your API Key
+
+// Get the model
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const scrapePortfolio = async (req, res) => {
-    const { url } = req.body;
-    if(!url) return res.status(500).json({ message: "Input a URL "})
-    const browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext();
-    const page = await context.newPage();
+  const { url } = req.body;
+  if (!url) return res.status(500).json({ message: "Input a URL" });
 
-    try {
-        await page.goto(url, { waitUntil: "networkidle" });
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-        // Extract Title
-        const title = await page.title();
-        
-        // Extract Meta Tags (description and keywords)
-        const metaTags = await page.$$eval('meta', (metas) => {
-            const metaObj = {};
-            metas.forEach(meta => {
-                const name = meta.getAttribute('name') || meta.getAttribute('property');
-                if (name) {
-                    metaObj[name.toLowerCase()] = meta.getAttribute('content');
-                }
-            });
-            return metaObj;
-        });
+  try {
+    await page.goto(url, { waitUntil: "networkidle" });
 
-        // Extract <a> tags
-        const links = await page.$$eval('a', anchors => anchors.map(a => a.href).filter(href => href));
-        const linkCount = links.length;
+    // Extract Metrics
+    const metaTags = await page.$$eval('meta', (metas) => {
+      const metaObj = {};
+      metas.forEach(meta => {
+        const name = meta.getAttribute('name') || meta.getAttribute('property');
+        if (name) {
+          metaObj[name.toLowerCase()] = meta.getAttribute('content');
+        }
+      });
+      return metaObj;
+    });
 
-        // Extract <div> and <section> counts
-        const divCount = await page.locator('div').count();
-        const sectionCount = await page.locator('section').count();
+    const links = await page.$$eval('a', anchors => anchors.map(a => a.href).filter(href => href));
+    const linkCount = links.length;
 
-        // Extract <h1>, <p> tags
-        const h1Tags = await page.$$eval('h1', h1s => h1s.map(h1 => h1.textContent.trim()));
-        const pTags = await page.$$eval('p', ps => ps.map(p => p.textContent.trim()));
+    const divCount = await page.locator('div').count();
+    const sectionCount = await page.locator('section').count();
 
-        // Extract Images and Alt attributes
-        const imgAlts = await page.$$eval('img', imgs => imgs.map(img => ({
-            src: img.src,
-            alt: img.alt || "No alt attribute"
-        })));
+    const h1Tags = await page.$$eval('h1', h1s => h1s.map(h1 => h1.textContent.trim()));
+    const pTags = await page.$$eval('p', ps => ps.map(p => p.textContent.trim()));
 
-        // Check URL format
-        const isValidURL = /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url);
+    const imgAlts = await page.$$eval('img', imgs => imgs.map(img => ({
+      src: img.src,
+      alt: img.alt || "No alt attribute"
+    })));
 
-        // Site Speed and Image Optimization
-        const imageData = await imageOptimizationMetrics(url);
-        const performanceData = await performanceMetrics(url);
+    const isValidURL = /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url);
 
-        // Results 
-        const results = {
-            seo: {
-                isTitleUniqueAndDescriptive: title.length > 10, // Example check
-                isMetaDescriptionValid: metaTags['description'] && metaTags['description'].length >= 160,
-            },
-            note: [
-                "Overall you have a solid portfolio but you lack in some aspect for example..."
-            ],
-            suggestions: [
-                linkCount >= 10 ? "Sufficient project links are present" : "Add more project links (>= 10)",
-                divCount <= 5 ? "Web page has minimal content" : "Consider reducing <div> tags for simplicity",
-                h1Tags.length > 0 ? "H1 tags found" : "Add descriptive H1 tags for better SEO",
-                performanceData.pageLoadTime < 3000,
-                performanceData.domContentLoaded < 3000,
-                imageData > 300,
-                imgAlts.length > 10,
-                imgAlts > 15,
-                pTags.length > 10,
-                sectionCount.length > 5,
-                title ? "There is title tags" : "Add Title Tags",
-                metaTags > 10,
-                
-            ],
-            critiques: [],
-        };
+    const imageData = await imageOptimizationMetrics(url);
+    const performanceData = await performanceMetrics(url);
 
-        // Construct Response
-        res.status(200).json(results);
+    // Construct Metrics for Gemini
+    const metrics = {
+      linkCount,
+      divCount,
+      sectionCount,
+      h1TagsCount: h1Tags.length,
+      pTagsCount: pTags.length,
+      imgAltCount: imgAlts.filter(img => img.alt !== "No alt attribute").length,
+      performance: performanceData,
+      isValidURL,
+    };
 
-    } catch (error) {
-        console.error("Error scraping portfolio:", error);
-        res.status(500).json({ error: "Error scraping portfolio", details: error.message });
-    } finally {
-        await browser.close();
-    }
+    const prompt = `
+      Based on the following metrics:
+      - Link Count: ${metrics.linkCount}
+      - Div Count: ${metrics.divCount}
+      - Section Count: ${metrics.sectionCount}
+      - H1 Tags Count: ${metrics.h1TagsCount}
+      - Paragraph Tags Count: ${metrics.pTagsCount}
+      - Image Alt Count: ${metrics.imgAltCount}
+      - Page Load Time: ${metrics.performance.pageLoadTime}ms
+      - DOM Content Loaded: ${metrics.performance.domContentLoaded}ms
+      - URL Format Valid: ${metrics.isValidURL}
+      
+      Provide feedback in three distinct categories:
+      1. Suggestions for Improvement: List specific actionable suggestions to improve the portfolio.
+      2. Critiques: Provide a critical analysis based on the metrics and performance.
+      3. Best Practices for Portfolio Development: Share industry best practices to follow.
+      
+      Keep the feedback clear, concise, and without any introductory lines.
+    `;
+
+    // Generate feedback using the generative model
+    const result = await model.generateContent(prompt);
+
+    // Extract and clean feedback
+    const feedbackText = result.response.text();
+    const feedbackArray = feedbackText.split("\n");
+
+    // Remove any unwanted introductory lines
+    const cleanedSuggestions = feedbackArray.filter(item => item.toLowerCase().includes("suggestion") && !item.toLowerCase().includes("improvement"));
+    const cleanedCritiques = feedbackArray.filter(item => item.toLowerCase().includes("critique"));
+    const cleanedBestPractices = feedbackArray.filter(item => item.toLowerCase().includes("best practice"));
+
+    // Calculate Hireable Percentage based on metrics
+    const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
+    const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100);
+
+    // Results
+    const results = {
+      feedback: [
+        { category: "Suggestions", items: cleanedSuggestions },
+        { category: "Critiques", items: cleanedCritiques },
+        { category: "Best Practices", items: cleanedBestPractices },
+      ],
+      hireablePercentage: hireablePercentage.toFixed(2) + "%",
+    };
+
+    res.status(200).json(results);
+
+  } catch (error) {
+    console.error("Error scraping portfolio:", error);
+    res.status(500).json({ error: "Error scraping portfolio", details: error.message });
+  } finally {
+    await browser.close();
+  }
 };
 
 module.exports = { scrapePortfolio };
