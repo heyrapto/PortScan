@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 7000;
 
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
-  "https://port-scan-r6pp.onrender.app",
+  "https://port-scan-8bl6.onrender.app",
   "https://portscan-clhm.onrender.app",
   "http://localhost:5173",
   "http://localhost:5174",
