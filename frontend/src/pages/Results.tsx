@@ -1,3 +1,4 @@
+import { Circle } from "../components/Circle";
 import Footer from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 
@@ -30,13 +31,7 @@ const Results = () => {
         <div className="flex flex-col text-center items-center justify-center gap-4" key={index}>
         <div className="flex flex-col gap-6 items-center justify-center text-center">
             <h1 className="text-white text-[1rem]">Your result</h1>
-                <div className="flex items-center justify-center h-[170px] w-[300px] rounded-full bg-gradient-to-r from-pink-400 via-blue-600 to-pink-400 p-2 circle">
-                <div className="flex flex-col w-full h-[135px] items-center justify-center bg-[#040018] rounded-full circle">
-                    <p className="text-gray-500 text-[0.7rem] font-semibold">You got</p>
-                 <span className="text-white bg-transparent text-[1.5rem]">{main.percentage}%</span>
-                </div>
-            </div>
-            
+            <Circle percentage={100}/>
         </div>
         <h1 className="text-gray-400">{main.note}</h1>
         </div>
