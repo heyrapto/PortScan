@@ -1,1 +1,1 @@
-PortScan Full-Stack with ReactTS, TailwindCSS, Zustand, NodeJS, ExpressJS, TensorFlowJS, Playwright.
+PortScan Full-Stack with ReactTS, TailwindCSS, Redux, NodeJS, ExpressJS, TensorFlowJS, Playwright.
