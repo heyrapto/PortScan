@@ -1,29 +1,9 @@
 import { Circle } from "../components/Circle";
 import Footer from "../components/Footer";
 import { Navbar } from "../components/Navbar";
+import { main, results } from "../constants/results";
 
 const Results = () => {
-    const main = [
-        {
-            percentage: 100,
-            note: "Solid Portfolio",
-        }
-    ]
-
-    const results = [
-        {
-            title: "Suggestions",
-            desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate mollitia alias hic eius deleniti architecto eaque tempore delectus! Alias magni sit veniam odit, ratione explicabo in dolorum vero non doloremque."
-        },
-        {
-            title: "Suggestions",
-            desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate mollitia alias hic eius deleniti architecto eaque tempore delectus! Alias magni sit veniam odit, ratione explicabo in dolorum vero non doloremque."
-        },
-        {
-            title: "Suggestions",
-            desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate mollitia alias hic eius deleniti architecto eaque tempore delectus! Alias magni sit veniam odit, ratione explicabo in dolorum vero non doloremque."
-        }
-    ]
     return(
         <section className="flex flex-col items-center justify-center text-white gap-5">
         <Navbar />
