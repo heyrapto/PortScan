@@ -2,7 +2,7 @@ export const Circle = ({percentage}: {percentage: number}) => {
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percentage / 100) * circumference;
-    const circleStyle = `linear-gradient(to right #f472b6, #60a5fa, to #f472b6)`;
+    const circleStyle = `linear-gradient(to right, #f472b6, #60a5fa, #f472b6)`;
     const bgCircleStyle = `#040018`;
 
     return(
