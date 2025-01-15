@@ -35,7 +35,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
     try {
       const fetchedData: string[] = [];
       const result = await axios.post(
-        "http://localhost:7000/api/scrape",
+        "https://port-scan-8bl6.onrender.com",
         { url },
         {
           headers: {
