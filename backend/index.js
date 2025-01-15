@@ -10,7 +10,8 @@ const allowedOrigins = [
   "https://port-scan-8bl6.onrender.com/api/scrape",
   "http://localhost:5173",
   "http://localhost:5174",
-]
+];
+
 app.use(
   cors({
     exposedHeaders: ["Content-Type"],

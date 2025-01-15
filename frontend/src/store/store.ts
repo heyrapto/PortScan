@@ -1,8 +1,5 @@
 import { create } from "zustand";
-
-type ResultStore = {
-    result: string[];
-}
+import { ResultStore } from "../types/zustandTypes";
 
 export const useResultStore = create<ResultStore>(() => ({
     result: [],
