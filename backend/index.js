@@ -12,9 +12,8 @@ const allowedOrigins = [
   "http://localhost:5174",
 ];
 
-app.use("/api/scrape",
+app.use(
   cors({
-    exposedHeaders: ["Content-Type"],
     origin: (origin, callback) => {
       if(!origin || allowedOrigins.includes(origin))  {
         callback(null, true);
@@ -24,6 +23,7 @@ app.use("/api/scrape",
     },
     methods: ["POST", "GET"],
     allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 )
 
