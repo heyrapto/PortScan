@@ -8,11 +8,12 @@ const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
   "https://port-scan-8bl6.onrender.com",
   "https://port-scan-8bl6.onrender.com/api/scrape",
+  "https://portscan-clhm.onrender.com",
   "http://localhost:5173",
   "http://localhost:5174",
 ];
 
-app.use(
+app.use("/api/scrape",
   cors({
     exposedHeaders: ["Content-Type"],
     origin: (origin, callback) => {
