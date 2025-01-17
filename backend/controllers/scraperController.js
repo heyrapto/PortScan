@@ -10,7 +10,7 @@ const scrapePortfolio = async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(500).json({ message: "Input a URL" });
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -110,7 +110,7 @@ const scrapePortfolio = async (req, res) => {
     res.status(200).json(results);
 
   } catch (error) {
-    console.error("Error scraping portfolio:", error);
+    console.error("Error scraping portfolio:", error.stack);
     res.status(500).json({ error: "Error scraping portfolio", details: error.message });
   } finally {
     await browser.close();
