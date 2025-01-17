@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 7000;
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
   "https://port-scan-8bl6.onrender.com",
-  "https://port-scan-8bl6.onrender.com/api/scrape",
   "https://portscan-clhm.onrender.com",
   "http://localhost:5173",
   "http://localhost:5174",
@@ -31,6 +30,9 @@ app.use("/api/scrape",
 app.options("*", cors())
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
+app.get("/api/scrape",(req, res) => {
+  res.json(scraperRoutes)
+})
 app.get("/", (req, res) => {
   res.send("API is working!")
 })
