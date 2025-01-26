@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const scraperRoutes = require("./routes/scraperRoutes");
 const cors = require('cors');
+const dotenv = require('dotenv');
 const PORT = process.env.PORT || 7000;
 
 const allowedOrigins = [
