@@ -13,7 +13,6 @@ const allowedOrigins = [
 ];
 
 dotenv.config();
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -32,9 +31,6 @@ app.use(
 app.options("*", cors())
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
-app.get("/api/scrape",(req, res) => {
-  res.json(scraperRoutes)
-})
 app.get("/", (req, res) => {
   res.send("API is working!")
 })

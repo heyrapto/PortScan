@@ -3,17 +3,11 @@ const { chromium } = require("playwright");
 const imageOptimizationMetrics = async (url) => {
     const browser = await chromium.launch();
     const page = await browser.newPage();
-
-    // Object to stor image load times
     const imageLoadTime = [];
-
-    // Listen to the response event for image resources
     page.on('response', (response) => {
         if(response.request().resourceType() === 'image'){
             const imageUrl = response.url();
-            const imageSize = response.headers()['content-length']; // In bytes
-
-            // Log the image URL and its size
+            const imageSize = response.headers()['content-length']; 
             imageLoadTime.push({ url: imageUrl, size: imageSize })
         }
     });

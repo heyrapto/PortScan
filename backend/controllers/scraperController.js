@@ -47,7 +47,6 @@ const scrapePortfolio = async (req, res) => {
     const imageData = await imageOptimizationMetrics(url);
     const performanceData = await performanceMetrics(url);
 
-    // Construct Metrics for Gemini
     const metrics = {
       linkCount,
       divCount,
@@ -79,24 +78,19 @@ const scrapePortfolio = async (req, res) => {
       Format the response cleanly, without any introductory lines or placeholders. Only include actionable content under each category.
     `;
 
-    // Generate feedback using the generative model
     const result = await model.generateContent(prompt);
     console.log(result.response.text());
 
-    // Extract and clean feedback
     const feedbackText = result.response.text();
     const feedbackArray = feedbackText.split("\n");
 
-    // Clean the feedback array
     const cleanedSuggestions = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("suggestion"));
     const cleanedCritiques = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("critique"));
     const cleanedBestPractices = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("best practice"));
 
-    // Calculate Hireable Percentage based on metrics
     const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
     const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100);
 
-    // Results
     const results = {
       feedback: [
         { category: "Suggestions", items: cleanedSuggestions },
