@@ -17,7 +17,6 @@ const scrapePortfolio = async (req, res) => {
   try {
     await page.goto(url, { waitUntil: "networkidle" });
 
-    // Extract Metrics
     const metaTags = await page.$$eval('meta', (metas) => {
       const metaObj = {};
       metas.forEach(meta => {
