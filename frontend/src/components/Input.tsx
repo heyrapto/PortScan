@@ -37,11 +37,11 @@ export const Input = ({ placeholder, type }: InputProps) => {
       const result = await axios.post(
         "https://port-scan-8bl6.onrender.com/api/scrape",
         { url },
-        {
+        /*{
           headers: {
             "Content-Type": "application/json",
           }
-        }
+        }*/
       );
       // const results = result.data; 
       setResult(fetchedData);
