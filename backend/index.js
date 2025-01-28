@@ -18,6 +18,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log(`Origin: ${origin}`);
       if(!origin || allowedOrigins.includes(origin))  {
         callback(null, true);
       } else {
@@ -30,7 +31,7 @@ app.use(
   })
 )
 
-app.options("*", cors())
+app.use(express.urlencoded({ extended: true })); 
 app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
 app.get("/", (req, res) => {
