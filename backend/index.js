@@ -5,6 +5,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 7000;
 
+dotenv.config();
+
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
   "https://port-scan-8bl6.onrender.com",
@@ -13,7 +15,6 @@ const allowedOrigins = [
   "http://localhost:5174",
 ];
 
-dotenv.config();
 app.use(
   cors({
     origin: (origin, callback) => {
