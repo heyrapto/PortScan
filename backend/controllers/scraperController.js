@@ -75,7 +75,7 @@ const scrapePortfolio = async (req, res) => {
       2. Critiques: Provide critical analysis based on the metrics and performance.
       3. Best Practices for Portfolio Development: Share industry best practices.
 
-      Format the response cleanly, without any introductory lines or placeholders. Only include actionable content under each category.
+      Format the response cleanly, without any introductory lines or placeholders. Only include actionable content under each category, make it clean and don't add asterisk.
     `;
 
     const result = await model.generateContent(prompt);
@@ -89,15 +89,15 @@ const scrapePortfolio = async (req, res) => {
     const cleanedBestPractices = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("best practice"));
 
     const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
-    const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100);
+    const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100 + 50);
 
     const results = {
       feedback: [
         { category: "Suggestions", items: cleanedSuggestions },
         { category: "Critiques", items: cleanedCritiques },
-        { category: "Best Practices", items: cleanedBestPractices },
+        { category: "BestPractices", items: cleanedBestPractices },
       ],
-      hireablePercentage: hireablePercentage.toFixed(2) + "%",
+      hireablePercentage: hireablePercentage.toFixed(2),
     };
 
     res.status(200).json(results);
