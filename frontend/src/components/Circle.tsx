@@ -45,4 +45,4 @@ export const Circle = ({ percentage }: { percentage: number }) => {
             </div>
         </div>
     );
-};
+}
