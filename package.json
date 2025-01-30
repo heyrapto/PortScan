@@ -20,10 +20,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "framer-motion": "^12.0.6",
     "jsdom": "^25.0.1",
     "nodemon": "^3.1.9",
     "playwright": "^1.49.1",
     "portfolio-rater-main": "file:",
+    "react-loading-skeleton": "^3.5.0",
+    "react-type-animation": "^3.2.0",
     "validator": "^13.12.0",
     "zustand": "^5.0.2"
   },

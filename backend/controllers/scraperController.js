@@ -79,28 +79,28 @@ const scrapePortfolio = async (req, res) => {
     `;
 
     const result = await model.generateContent(prompt);
-    console.log(result.response.text());
+const feedbackText = result.candidates[0]?.content?.parts?.map(part => part.text).join("\n").replace(/\*/g, "").trim();
 
-    const feedbackText = result.response.text();
-    const feedbackArray = feedbackText.split("\n");
+const feedbackArray = feedbackText.split("\n").map(line => line.trim()).filter(line => line);
 
-    const cleanedSuggestions = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("suggestion"));
-    const cleanedCritiques = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("critique"));
-    const cleanedBestPractices = feedbackArray.filter(item => item.trim() && item.toLowerCase().includes("best practice"));
+const cleanedSuggestions = feedbackArray.filter(item => item.toLowerCase().includes("suggestion"));
+const cleanedCritiques = feedbackArray.filter(item => item.toLowerCase().includes("critique"));
+const cleanedBestPractices = feedbackArray.filter(item => item.toLowerCase().includes("best practice"));
 
-    const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
-    const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100 + 50);
+const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
+const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100 + 50);
 
-    const results = {
-      feedback: [
-        { category: "Suggestions", items: cleanedSuggestions },
-        { category: "Critiques", items: cleanedCritiques },
-        { category: "BestPractices", items: cleanedBestPractices },
-      ],
-      hireablePercentage: hireablePercentage.toFixed(2),
-    };
+const results = {
+  feedback: [
+    { category: "Suggestions", items: cleanedSuggestions },
+    { category: "Critiques", items: cleanedCritiques },
+    { category: "Best Practices", items: cleanedBestPractices },
+  ],
+  hireablePercentage: hireablePercentage.toFixed(2),
+};
 
-    res.status(200).json(results);
+res.status(200).json(results);
+
 
   } catch (error) {
     console.error("Error scraping portfolio:", error.stack);
