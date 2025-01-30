@@ -6,9 +6,48 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI("AIzaSyC6psnET5Eib_ALt89hSU_yoJ85oUSaaG8");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+const parseFeedback = (text) => {
+  const sections = text.split(/\n\s*\n/);
+  const result = {
+    suggestions: [],
+    critiques: [],
+    bestPractices: []
+  };
+
+  let currentSection = null;
+  const sectionPatterns = {
+    suggestions: /suggestions? for improvement/i,
+    critiques: /critiques?/i,
+    bestPractices: /best practices? for portfolio development/i
+  };
+
+  sections.forEach(section => {
+    const cleanSection = section.trim();
+    
+    // Check for section headers
+    for (const [sectionName, pattern] of Object.entries(sectionPatterns)) {
+      if (cleanSection.match(pattern)) {
+        currentSection = sectionName;
+        return;
+      }
+    }
+
+    // Process content lines
+    if (currentSection && cleanSection) {
+      const items = cleanSection.split('\n')
+        .map(item => item.replace(/^\s*[-•*]\s*|\d+\.\s*/, '').trim())
+        .filter(item => item.length > 0);
+      
+      result[currentSection].push(...items);
+    }
+  });
+
+  return result;
+};
+
 const scrapePortfolio = async (req, res) => {
   const { url } = req.body;
-  if (!url) return res.status(500).json({ message: "Input a URL" });
+  if (!url) return res.status(400).json({ message: "Input a valid URL" });
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
@@ -17,94 +56,88 @@ const scrapePortfolio = async (req, res) => {
   try {
     await page.goto(url, { waitUntil: "networkidle" });
 
-    const metaTags = await page.$$eval('meta', (metas) => {
-      const metaObj = {};
-      metas.forEach(meta => {
-        const name = meta.getAttribute('name') || meta.getAttribute('property');
-        if (name) {
-          metaObj[name.toLowerCase()] = meta.getAttribute('content');
-        }
-      });
-      return metaObj;
-    });
+    // Scrape metrics
+    const [metaTags, links, divCount, sectionCount, h1Tags, pTags, imgAlts] = await Promise.all([
+      page.$$eval('meta', metas => {
+        const metaObj = {};
+        metas.forEach(meta => {
+          const name = meta.getAttribute('name') || meta.getAttribute('property');
+          if (name) metaObj[name.toLowerCase()] = meta.getAttribute('content');
+        });
+        return metaObj;
+      }),
+      page.$$eval('a', anchors => anchors.map(a => a.href).filter(href => href)),
+      page.locator('div').count(),
+      page.locator('section').count(),
+      page.$$eval('h1', h1s => h1s.map(h1 => h1.textContent.trim())),
+      page.$$eval('p', ps => ps.map(p => p.textContent.trim())),
+      page.$$eval('img', imgs => imgs.map(img => ({
+        src: img.src,
+        alt: img.alt || "No alt attribute"
+      })))
+    ]);
 
-    const links = await page.$$eval('a', anchors => anchors.map(a => a.href).filter(href => href));
-    const linkCount = links.length;
-
-    const divCount = await page.locator('div').count();
-    const sectionCount = await page.locator('section').count();
-
-    const h1Tags = await page.$$eval('h1', h1s => h1s.map(h1 => h1.textContent.trim()));
-    const pTags = await page.$$eval('p', ps => ps.map(p => p.textContent.trim()));
-
-    const imgAlts = await page.$$eval('img', imgs => imgs.map(img => ({
-      src: img.src,
-      alt: img.alt || "No alt attribute"
-    })));
-
-    const isValidURL = /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url);
-
-    const imageData = await imageOptimizationMetrics(url);
-    const performanceData = await performanceMetrics(url);
+    // Get performance data
+    const [imageData, performanceData] = await Promise.all([
+      imageOptimizationMetrics(url),
+      performanceMetrics(url)
+    ]);
 
     const metrics = {
-      linkCount,
+      linkCount: links.length,
       divCount,
       sectionCount,
       h1TagsCount: h1Tags.length,
       pTagsCount: pTags.length,
       imgAltCount: imgAlts.filter(img => img.alt !== "No alt attribute").length,
       performance: performanceData,
-      isValidURL,
+      isValidURL: /^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url),
     };
 
-    const prompt = `
-      Based on the following metrics:
-      - Link Count: ${metrics.linkCount}
-      - Div Count: ${metrics.divCount}
-      - Section Count: ${metrics.sectionCount}
-      - H1 Tags Count: ${metrics.h1TagsCount}
-      - Paragraph Tags Count: ${metrics.pTagsCount}
-      - Image Alt Count: ${metrics.imgAltCount}
-      - Page Load Time: ${metrics.performance.pageLoadTime}ms
-      - DOM Content Loaded: ${metrics.performance.domContentLoaded}ms
-      - URL Format Valid: ${metrics.isValidURL}
-      
-      Provide feedback in three distinct categories:
-      1. Suggestions for Improvement: Provide actionable suggestions.
-      2. Critiques: Provide critical analysis based on the metrics and performance.
-      3. Best Practices for Portfolio Development: Share industry best practices.
-
-      Format the response cleanly, without any introductory lines or placeholders. Only include actionable content under each category, make it clean and don't add asterisk.
-    `;
-
+    const prompt = `Based on these metrics: ${JSON.stringify(metrics, null, 2)}
+      Provide structured feedback in these exact categories:
+      1. Suggestions for Improvement
+      2. Critiques
+      3. Best Practices for Portfolio Development
+      Format: Clean bullet points without any markdown or numbering.`;
+    
     const result = await model.generateContent(prompt);
-const feedbackText = result.candidates[0]?.content?.parts?.map(part => part.text).join("\n").replace(/\*/g, "").trim();
+    const feedbackText = (await result.response.text()).replace(/\*/g, "").trim();
+    
+    console.log("Raw Feedback:", feedbackText);
+    const parsedFeedback = parseFeedback(feedbackText);
+    console.log("Parsed Feedback:", parsedFeedback);
 
-const feedbackArray = feedbackText.split("\n").map(line => line.trim()).filter(line => line);
+    const hireableScore = Math.min(
+      (metrics.linkCount * 0.5 +
+       metrics.h1TagsCount * 1.5 +
+       metrics.pTagsCount * 1.2 +
+       metrics.imgAltCount * 2) / 5,
+      100
+    );
 
-const cleanedSuggestions = feedbackArray.filter(item => item.toLowerCase().includes("suggestion"));
-const cleanedCritiques = feedbackArray.filter(item => item.toLowerCase().includes("critique"));
-const cleanedBestPractices = feedbackArray.filter(item => item.toLowerCase().includes("best practice"));
+    const response = {
+      success: true,
+      feedback: {
+        suggestions: parsedFeedback.suggestions,
+        critiques: parsedFeedback.critiques,
+        bestPractices: parsedFeedback.bestPractices
+      },
+      metrics: {
+        ...metrics,
+        hireablePercentage: hireableScore.toFixed(2)
+      }
+    };
 
-const hireableScore = (metrics.linkCount + metrics.divCount + metrics.sectionCount + metrics.h1TagsCount + metrics.pTagsCount + metrics.imgAltCount) / 6;
-const hireablePercentage = Math.min(Math.max(hireableScore, 0), 100 + 50);
-
-const results = {
-  feedback: [
-    { category: "Suggestions", items: cleanedSuggestions },
-    { category: "Critiques", items: cleanedCritiques },
-    { category: "Best Practices", items: cleanedBestPractices },
-  ],
-  hireablePercentage: hireablePercentage.toFixed(2),
-};
-
-res.status(200).json(results);
-
+    res.status(200).json(response);
 
   } catch (error) {
-    console.error("Error scraping portfolio:", error.stack);
-    res.status(500).json({ error: "Error scraping portfolio", details: error.message });
+    console.error("Scraping Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Analysis failed",
+      details: error.message
+    });
   } finally {
     await browser.close();
   }

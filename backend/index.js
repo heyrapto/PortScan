@@ -11,9 +11,7 @@ dotenv.config();
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
   "https://port-scan-8bl6.onrender.com",
-  "https://portscan-clhm.onrender.com",
   "http://localhost:5173",
-  "http://localhost:5174",
 ];
 
 app.use(express.urlencoded({ extended: true })); 
