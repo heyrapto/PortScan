@@ -24,7 +24,6 @@ const parseFeedback = (text) => {
   sections.forEach(section => {
     const cleanSection = section.trim();
     
-    // Check for section headers
     for (const [sectionName, pattern] of Object.entries(sectionPatterns)) {
       if (cleanSection.match(pattern)) {
         currentSection = sectionName;
@@ -32,7 +31,6 @@ const parseFeedback = (text) => {
       }
     }
 
-    // Process content lines
     if (currentSection && cleanSection) {
       const items = cleanSection.split('\n')
         .map(item => item.replace(/^\s*[-•*]\s*|\d+\.\s*/, '').trim())
@@ -56,7 +54,6 @@ const scrapePortfolio = async (req, res) => {
   try {
     await page.goto(url, { waitUntil: "networkidle" });
 
-    // Scrape metrics
     const [metaTags, links, divCount, sectionCount, h1Tags, pTags, imgAlts] = await Promise.all([
       page.$$eval('meta', metas => {
         const metaObj = {};
@@ -77,7 +74,6 @@ const scrapePortfolio = async (req, res) => {
       })))
     ]);
 
-    // Get performance data
     const [imageData, performanceData] = await Promise.all([
       imageOptimizationMetrics(url),
       performanceMetrics(url)
@@ -118,15 +114,10 @@ const scrapePortfolio = async (req, res) => {
 
     const response = {
       success: true,
-      feedback: {
-        suggestions: parsedFeedback.suggestions,
-        critiques: parsedFeedback.critiques,
-        bestPractices: parsedFeedback.bestPractices
-      },
-      metrics: {
-        ...metrics,
-        hireablePercentage: hireableScore.toFixed(2)
-      }
+      suggestions: parsedFeedback.suggestions,
+      critiques: parsedFeedback.critiques,
+      bestPractices: parsedFeedback.bestPractices,
+      hireablePercentage: hireableScore.toFixed(2),
     };
 
     res.status(200).json(response);

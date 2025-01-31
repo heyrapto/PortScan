@@ -7,25 +7,10 @@ export const useScanStore = create<ScanState>((set) => ({
   loading: false,
   error: null,
   result: {
-    feedback: {
-      suggestions: [],
-      critiques: [],
-      bestPractices: [],
-    },
-    metrics: {
-      linkCount: 0,
-      divCount: 0,
-      sectionCount: 0,
-      h1TagsCount: 0,
-      pTagsCount: 0,
-      imgAltCount: 0,
-      performance: {
-        pageLoadTime: 0,
-        domContentLoaded: 0
-      },
-      isValidURL: false,
-      hireablePercentage: '0.00'
-    }
+    suggestions: [],
+    critiques: [],
+    bestPractices: [],
+    hireablePercentage: '0.00'
   },
   response: null,
 
@@ -43,20 +28,14 @@ export const useScanStore = create<ScanState>((set) => ({
 
       set({ 
         result: {
-          feedback: {
-            suggestions: data.feedback.suggestions || [],
-            critiques: data.feedback.critiques || [],
-            bestPractices: data.feedback.bestPractices || [],
-          },
-          metrics: {
-            ...data.metrics,
-            hireablePercentage: data.metrics.hireablePercentage || '0.00'
-          }
+          suggestions: data.suggestions || [],
+          critiques: data.critiques || [],
+          bestPractices: data.bestPractices || [],
+          hireablePercentage: data.hireablePercentage || '0.00'
         },
         response: JSON.stringify(data, null, 2),
         error: null
       });
-
     } catch (err) {
       const error = axios.isAxiosError(err) 
         ? err.response?.data?.message || "Request error"

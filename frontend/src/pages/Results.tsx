@@ -39,11 +39,26 @@ const TypingText = ({ text }: { text: string }) => {
 };
 
 const Results = () => {
-    const { result, error, loading, url } = useScanStore();
+    const { result, error, loading } = useScanStore();
 
     if (loading) return <Skeleton />;
     if (error) return <div className="text-red-500">Error: {error}</div>;
     if (!result) return <div className="text-white">No results available</div>;
+
+    const feedbackCategories = [
+        {
+            title: "Suggestions",
+            items: result.suggestions,
+        },
+        {
+            title: "Critiques",
+            items: result.critiques,
+        },
+        {
+            title: "Best Practices",
+            items: result.bestPractices,
+        }
+    ];
 
     return (
         <section className="flex flex-col items-center justify-center text-white gap-5 p-6">
@@ -51,19 +66,19 @@ const Results = () => {
             <div className="flex flex-col text-center items-center justify-center gap-4">
                 <div className="flex flex-col gap-6 items-center justify-center text-center">
                     <h1 className="text-white text-lg font-semibold">Your Result</h1>
-                    <Circle percentage={result.hireablePercentage} />
+                    <Circle percentage={parseFloat(result.hireablePercentage)} />
                 </div>
                 <TypingText text={main[0].note} />
             </div>
 
             <div className="md:grid grid-cols-2 gap-10 items-start justify-center px-[50px] w-full max-w-4xl mt-[20px]">
-                {result.feedback.map((category, index) => (
+                {feedbackCategories.map((category, index) => (
                     <div 
                         key={index}
                         className="bg-white/10 p-6 rounded-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
                     >
                         <h2 className="text-xl font-bold mb-4 capitalize text-white">
-                            {category.category}
+                            {category.title}
                         </h2>
                         <ul className="space-y-3">
                             {category.items.map((item, itemIndex) => (
@@ -72,7 +87,6 @@ const Results = () => {
                                     className="text-gray-300 text-sm p-3 bg-black/20 rounded-md hover:bg-black/30 transition"
                                 >
                                     <TypingText text={item} />
-                                    
                                 </li>
                             ))}
                         </ul>
