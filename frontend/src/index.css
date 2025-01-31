@@ -9,53 +9,47 @@
     background-color: #040018;
 }
 
-.hero_text{
+.hero_text {
     position: relative;
+    display: inline-block;
+    padding: 5px;
 }
 
-.hero_text::before{
+.hero_text::before {
+    content: "";
+    background-color: #54FFE8;
+    position: absolute;
+    rotate: 2deg; 
+    width: 90%; 
+    height: 2px;
+    bottom: 7px; 
+    left: 5%;
+}
+
+.hero_text::after {
     content: "";
     background-color: #79C6F9;
     position: absolute;
-    rotate: 2.41deg;
-    width: 100%;
-    height: 1px;
-    bottom: 5px;
-    left: 0;
-}
-.hero_text::after{
-    content: "";
-    background-color: #79C6F9;
-    position: absolute;
-    rotate: -2.41deg;
-    width: 100%;
-    height: 1px;
-    bottom: 10px;
-    right: 0;
+    rotate: -1deg; 
+    width: 92%; 
+    height: 2px;
+    bottom: 8px;
+    right: 4%;
 }
 
-@media only screen and(max-width: 600px){
-    .hero_text::before{
-        content: "";
-        background-color: #79C6F9;
-        position: absolute;
-        rotate: 2.41deg;
-        width: 100%;
-        height: 1px;
-        bottom: 5px;
-        left: 0;
+@media only screen and (max-width: 600px) {
+    .hero_text::before {
+        rotate: 1.5deg;
+        width: 92%;
+        bottom: 6px;
     }
-    .hero_text::after{
-        content: "";
-        background-color: #79C6F9;
-        position: absolute;
-        rotate: -2.41deg;
-        width: 100%;
-        height: 1px;
-        bottom: 10px;
-        right: 0;
+    .hero_text::after {
+        rotate: -0.5deg;
+        width: 94%;
+        bottom: 7px;
     }
 }
+
 
 .circle{
     clip-path: circle();
