@@ -105,10 +105,10 @@ const scrapePortfolio = async (req, res) => {
     console.log("Parsed Feedback:", parsedFeedback);
 
     const hireableScore = Math.min(
-      (metrics.linkCount * 0.5 +
-       metrics.h1TagsCount * 1.5 +
-       metrics.pTagsCount * 1.2 +
-       metrics.imgAltCount * 2) / 5,
+      (metrics.linkCount * 1.0 +  
+       metrics.h1TagsCount * 2.0 +  
+       metrics.pTagsCount * 1.5 +  
+       metrics.imgAltCount * 2.5) / 2, 
       100
     );
 
