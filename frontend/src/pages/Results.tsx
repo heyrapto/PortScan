@@ -107,37 +107,47 @@ const Results = () => {
             </div>
 
             <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="md:grid grid-cols-2 md:gap-10 items-start justify-center px-[50px] w-full max-w-4xl mt-[20px]"
-            >
-                {feedbackCategories.map((category, index) => (
-                    <motion.div
-                        key={index}
-                        variants={itemVariants}
-                        whileHover={{ scale: 1.02 }}
-                        className="bg-white/10 p-6 rounded-xl hover:bg-white/15 transition-all border border-white/20 shadow-xl backdrop-blur-sm"
+    variants={containerVariants}
+    initial="hidden"
+    animate="visible"
+    className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-8 w-full max-w-7xl mt-8"
+>
+    {feedbackCategories.map((category, index) => (
+        <motion.div
+            key={index}
+            variants={itemVariants}
+            whileHover={{ y: -5, scale: 1.03 }}
+            className="group relative bg-white/5 p-8 rounded-2xl transition-all border border-white/10 shadow-2xl backdrop-blur-lg overflow-hidden"
+        >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 transition-opacity" />
+            
+            <h2 className="text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                {category.title}
+            </h2>
+            
+            <ul className="space-y-4">
+                {category.items.map((item, itemIndex) => (
+                    <motion.li
+                        key={itemIndex}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: itemIndex * 0.05 }}
+                        className="flex items-start space-x-3 text-gray-300 text-base p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors border border-white/5 cursor-default"
                     >
-                        <h2 className="text-xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                            {category.title}
-                        </h2>
-                        <ul className="space-y-3">
-                            {category.items.map((item, itemIndex) => (
-                                <motion.li
-                                    key={itemIndex}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: itemIndex * 0.05 }}
-                                    className="text-gray-300 text-sm p-3 bg-black/20 rounded-lg hover:bg-black/30 transition-colors border border-white/10 md:mt-0 mt-4"
-                                >
-                                    <TypingText text={item} />
-                                </motion.li>
-                            ))}
-                        </ul>
-                    </motion.div>
+                        <motion.span 
+                            className="text-blue-400 mt-1"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                        >
+                            •
+                        </motion.span>
+                        <TypingText text={item} />
+                    </motion.li>
                 ))}
-            </motion.div>
+            </ul>
+        </motion.div>
+    ))}
+</motion.div>
 
             <Footer />
         </section>
