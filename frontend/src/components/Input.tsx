@@ -38,7 +38,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
 
   return (
     <section className="relative">
-      <div className="md:flex md:rounded-[12px] w-[300px] border border-[#262626] p-[5px] flex-col md:relative h-[40px]">
+      <div className="md:flex md:rounded-[12px] w-[300px] border border-[#262626] p-[5px] flex-col md:relative static h-[40px]">
         <div className="flex gap-1 ml-[10px] rounded-md text-left justify-start">
           <Link className="w-[15px]" />
           <input
@@ -59,16 +59,7 @@ export const Input = ({ placeholder, type }: InputProps) => {
         disabled={loading} 
       />
 
-      {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>} 
-      {loading && (
-        <div className="absolute top-0 left-0 right-0 bottom-0 backdrop-blur-2xl bg-transparent flex flex-col h-screen w-full m-auto text-center items-center justify-center">
-          <div className="m-auto animate-spin">
-            <span className="w-[50px] text-[50px] animate-spin bg-transparent">⌛️</span>
-            </div>
-            <h1 className="text-white text-[0.7rem] text-center mt-[5px] animate-none">
-              Analyzing...</h1>
-            </div>
-      )}
+      {error && <div className="text-red-500 mt-2 text-[0.6rem] text-center">{error}</div>}
     </section>
   );
 };

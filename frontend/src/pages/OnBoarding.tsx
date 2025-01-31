@@ -9,7 +9,7 @@ const OnBoarding = () => {
         <span className="text-gray-400 text-[0.9rem] pb-[15px] pt-[60px]">Analyze your portfolio</span>
         <div className="relative z-40">
         <h1 className="font-md md:text-[3.5rem] text-[2.5rem] text-center md:pb-0 pb-[20px]">Make it <span className="hero_text">hireable</span></h1>
-        <span className="absolute bg-[#2FB6FF] md:blur-xl md:w-[230px] rounded-[5px] md:h-[15px] md:bottom-[25px] right-0 z-0 w-[160px] h-[15px] bottom-[35px] blur-2xl"></span>
+        <span className="absolute bg-[#2FB6FF] md:blur-md md:w-[190px] rounded-[5px] md:h-[15px] md:bottom-[25px] right-0 z-0 w-[160px] h-[15px] bottom-[35px] blur-2xl"></span>
         </div>
         <p className="pb-[50px] text-gray-400 text-[0.9rem] md:w-full w-[300px] text-center">Let's analyze and improve your portfolio in one click</p>
         <Input placeholder={"Paste your link here"} type={"text"} />

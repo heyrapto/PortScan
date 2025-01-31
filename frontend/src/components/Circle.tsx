@@ -1,6 +1,6 @@
-export const Circle = ({ percentage }: { percentage: number }) => {
+export const Circle = ({ percentage, animated }: { percentage: number, animated?: boolean }) => {
     const radius = 50;
-    const strokeWidth = 10;
+    const strokeWidth = 15;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percentage / 100) * circumference;
 
@@ -39,7 +39,7 @@ export const Circle = ({ percentage }: { percentage: number }) => {
                     transform="rotate(-90 60 60)" 
                 />
             </svg>
-            <div className="absolute flex flex-col items-center bg-transparent overflow-hidden">
+            <div className="absolute flex flex-col items-center bg-transparent overflow-hidden p-10">
                 <p className="text-gray-500 text-[0.7rem] font-semibold">You got</p>
                 <span className="text-white text-[1.5rem] bg-transparent">{percentage}%</span>
             </div>

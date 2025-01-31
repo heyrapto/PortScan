@@ -19,12 +19,12 @@ export const Navbar = () => {
                 } md:flex md:flex-row md:gap-10 transition-all duration-300 ease-in-out transform md:static absolute top-0 left-0 w-full md:w-auto`}>
                 <ul className="flex md:flex-row md:gap-10 flex-col bg-transparent">
                     <div className="flex gap-1">
-                        <HomeIcon className="text-gray-400 w-[15px] md:flex hidden" />
-                        <li><a href="#" className="text-gray-500 md:text-[0.7rem] text-[1rem] hover:text-gray-300 transition ease-in-out duration-100">Home</a></li>
+                        <HomeIcon className="text-[#B999F4] w-[15px] md:flex hidden" />
+                        <li><a href="#" className="text-[#B999F4] md:text-[0.7rem] text-[1rem] hover:text-gray-300 transition ease-in-out duration-100">Home</a></li>
                     </div>
                     <div className="flex gap-1">
                         <Link className="text-gray-400 w-[15px] md:flex hidden" />
-                        <li><a href="#" className="text-gray-500 md:text-[0.7rem] text-[1rem] hover:text-gray-300 transition ease-in-out duration-100">Paste links</a></li>
+                        <li><a href="#" className="text-gray-500 md:text-[0.7rem] text-[1rem] hover:text-gray-300 transition ease-in-out duration-100">Result</a></li>
                     </div>
                     <div className="flex gap-1">
                         <PhoneCallIcon className="text-gray-400 w-[15px] md:flex hidden" />

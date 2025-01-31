@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Circle } from "../components/Circle";
 import Footer from "../components/Footer";
 import { Navbar } from "../components/Navbar";
@@ -32,10 +33,18 @@ const TypingText = ({ text }: { text: string }) => {
             setDisplayText(text.slice(0, i));
             i++;
             if (i > text.length) clearInterval(interval);
-        }, 50);
+        }, 30);
         return () => clearInterval(interval);
     }, [text]);
-    return <h1 className="text-gray-400">{displayText}</h1>;
+    return (
+        <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-gray-400"
+        >
+            {displayText}
+        </motion.span>
+    );
 };
 
 const Results = () => {
@@ -60,39 +69,75 @@ const Results = () => {
         }
     ];
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { type: "spring", stiffness: 120 }
+        }
+    };
+
     return (
         <section className="flex flex-col items-center justify-center text-white gap-5 p-6">
             <Navbar />
             <div className="flex flex-col text-center items-center justify-center gap-4">
                 <div className="flex flex-col gap-6 items-center justify-center text-center">
                     <h1 className="text-white text-lg font-semibold">Your Result</h1>
-                    <Circle percentage={parseFloat(result.hireablePercentage)} />
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 100 }}
+                    >
+                        <Circle percentage={parseFloat(result.hireablePercentage)} />
+                    </motion.div>
                 </div>
                 <TypingText text={main[0].note} />
             </div>
 
-            <div className="md:grid grid-cols-2 gap-10 items-start justify-center px-[50px] w-full max-w-4xl mt-[20px]">
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="md:grid grid-cols-2 md:gap-10 items-start justify-center px-[50px] w-full max-w-4xl mt-[20px]"
+            >
                 {feedbackCategories.map((category, index) => (
-                    <div 
+                    <motion.div
                         key={index}
-                        className="bg-white/10 p-6 rounded-lg hover:bg-white/20 transition-colors border border-white/20 shadow-lg"
+                        variants={itemVariants}
+                        whileHover={{ scale: 1.02 }}
+                        className="bg-white/10 p-6 rounded-xl hover:bg-white/15 transition-all border border-white/20 shadow-xl backdrop-blur-sm"
                     >
-                        <h2 className="text-xl font-bold mb-4 capitalize text-white">
+                        <h2 className="text-xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                             {category.title}
                         </h2>
                         <ul className="space-y-3">
                             {category.items.map((item, itemIndex) => (
-                                <li 
+                                <motion.li
                                     key={itemIndex}
-                                    className="text-gray-300 text-sm p-3 bg-black/20 rounded-md hover:bg-black/30 transition"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: itemIndex * 0.05 }}
+                                    className="text-gray-300 text-sm p-3 bg-black/20 rounded-lg hover:bg-black/30 transition-colors border border-white/10 md:mt-0 mt-4"
                                 >
                                     <TypingText text={item} />
-                                </li>
+                                </motion.li>
                             ))}
                         </ul>
-                    </div>
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
 
             <Footer />
         </section>
