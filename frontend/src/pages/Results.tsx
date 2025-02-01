@@ -117,7 +117,7 @@ const Results = () => {
             key={index}
             variants={itemVariants}
             whileHover={{ y: -5, scale: 1.03 }}
-            className="group relative bg-white/5 p-8 rounded-2xl transition-all border border-white/10 shadow-2xl backdrop-blur-lg overflow-hidden"
+            className="group relative bg-transparent p-8 rounded-2xl transition-all border border-white/10 shadow-2xl backdrop-blur-lg overflow-hidden"
         >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 transition-opacity" />
             
@@ -132,7 +132,7 @@ const Results = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: itemIndex * 0.05 }}
-                        className="flex items-start space-x-3 text-gray-300 text-base p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors border border-white/5 cursor-default"
+                        className="flex items-start space-x-3 text-gray-300 text-base p-4 bg-transparent rounded-xl hover:bg-white/10 transition-colors border border-white/5 cursor-default"
                     >
                         <motion.span 
                             className="text-blue-400 mt-1"
