@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "backend": "node --watch server.js",
-    "start": "npx playwright install && node server.js",
-    "build": "npx playwright install && npm run build"
-  },
+  "backend": "node --watch server.js",
+  "start": "node server.js",
+  "dev": "npx playwright install && node server.js",
+  "build": "npm run build:app",
+  "build:app": "next build",
+  "playwright:install": "npx playwright install"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
