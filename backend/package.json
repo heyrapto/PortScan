@@ -1,12 +1,10 @@
 {
   "name": "portfolio-rater-main",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "frontend": "npm run dev --prefix frontend",
-    "backend": "node --watch backend/index.js",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
-    "start": "npx playwright install && node backend/index.js",
+    "backend": "node --watch server.js",
+    "start": "npx playwright install && node server.js",
     "build": "npx playwright install && npm run build"
   },
   "keywords": [],
@@ -20,6 +18,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^8.0.1",
     "framer-motion": "^12.0.6",
     "jsdom": "^25.0.1",
     "nodemon": "^3.1.9",

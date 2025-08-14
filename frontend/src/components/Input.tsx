@@ -18,7 +18,6 @@ export const Input = ({ placeholder, type }: InputProps) => {
     loading,
     error,
     result,
-    response,
     setUrl,
     scanUrl
   } = useScanStore();

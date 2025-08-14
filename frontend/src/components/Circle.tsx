@@ -1,4 +1,4 @@
-export const Circle = ({ percentage, animated }: { percentage: number, animated?: boolean }) => {
+export const Circle = ({ percentage }: { percentage: number }) => {
     const radius = 80; // Increased size
     const strokeWidth = 20; // Adjusted stroke width
     const circumference = 2 * Math.PI * radius;
