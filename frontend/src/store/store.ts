@@ -21,7 +21,7 @@ export const useScanStore = create<ScanState>((set) => ({
     
     try {
       const { data } = await axios.post(
-        "http://localhost:7000/api/scrape",
+        "https://port-scan-8bl6.onrender.com/api/scrape",
         { url },
         { headers: { "Content-Type": "application/json" } }
       );
