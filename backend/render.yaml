@@ -15,5 +15,4 @@ services:
         libgles2
       npm install
       npx playwright install
-      npm run build:app
-    startCommand: node server.js
+    startCommand: npm start
