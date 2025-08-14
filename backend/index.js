@@ -5,10 +5,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 7000;
 
-app.use(express.urlencoded({ extended: true })); 
-app.use(express.json())
-
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
 
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
