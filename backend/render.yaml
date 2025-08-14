@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: portfolio-rater
+    env: node
+    buildCommand: |
+      apt-get update && apt-get install -y \
+        libgtk-4-1 \
+        libgraphene-1.0-0 \
+        libgstreamer-gl1.0-0 \
+        gstreamer1.0-plugins-bad \
+        libavif15 \
+        libenchant-2-2 \
+        libsecret-1-0 \
+        libmanette-0.2-0 \
+        libgles2
+      npm install
+      npx playwright install
+      npm run build:app
+    startCommand: node server.js
