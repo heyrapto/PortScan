@@ -5,8 +5,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 7000;
 
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json())
+
 app.use(cors());
-dotenv.config();
 
 const allowedOrigins = [
   "https://port-scan-ten.vercel.app",
@@ -14,8 +16,6 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
-app.use(express.urlencoded({ extended: true })); 
-app.use(express.json())
 app.use("/api/scrape", scraperRoutes)
 app.get("/", (req, res) => {
   res.send("API is working!")
