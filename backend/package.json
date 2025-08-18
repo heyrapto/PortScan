@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
   "dev": "node --watch server.js",
-  "start": "npx playwright install && node backend/index.js",
+  "start": "npx playwright install && node backend/server.js",
   "build": "npx playwright install && npm run build"
   "playwright:install": "npx playwright install"
 },
