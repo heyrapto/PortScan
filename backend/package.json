@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-  "backend": "node --watch server.js",
-  "start": "node server.js",
-  "dev": "npx playwright install && node server.js",
-  "build": "echo 'No build step' && exit 0",
+  "dev": "node --watch server.js",
+  "start": "npx playwright install && node backend/index.js",
+  "build": "npx playwright install && npm run build"
   "playwright:install": "npx playwright install"
 },
   "keywords": [],
