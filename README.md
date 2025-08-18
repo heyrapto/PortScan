@@ -14,12 +14,14 @@ Follow these steps to run Portscan locally:
 
 In the backend terminal:
 
+npm run build
+
 npm run dev
 
 
 In the frontend terminal:
 
-npm start
+npm run dev
 
 
 Open the frontend in your browser at:
